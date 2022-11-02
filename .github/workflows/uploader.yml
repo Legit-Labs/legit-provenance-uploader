@@ -1,0 +1,36 @@
+name: Legit Provenance Uploader
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: "image to which the provenance refers"
+        required: true
+        type: string
+      digest:
+        description: "the digest of the subject"
+        required: true
+        type: string
+      registry:
+        description: "the registry address"
+        required: false
+        type: string
+    secrets:
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+
+permissions: read-all
+
+jobs:
+  upload:
+    uses: Legit-Labs/legit-attestation-uploader/.github/workflows/uploader.yml@f16768461c9b7de51db716e241d733b2dfffd2d5
+    with:
+      name: legit-provenance
+      image: ${{ inputs.image }}
+      digest: ${{ inputs.digest }}
+      registry: ${{ inputs.registry }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
